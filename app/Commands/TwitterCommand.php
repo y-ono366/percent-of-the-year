@@ -12,7 +12,7 @@ class TwitterCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'twitter {name=Artisan}';
+    protected $signature = 'twitter';
 
     /**
      * The description of the command.
@@ -28,7 +28,10 @@ class TwitterCommand extends Command
      */
     public function handle()
     {
+        date_default_timezone_set('Asia/Tokyo');
         $this->info('Start check percent of the year.');
+        echo date("Y-m-d h:i:s"),PHP_EOL;
+        echo date("Y-m-d h:i:s",strtotime("+3 day")),PHP_EOL;
     }
 
     /**
