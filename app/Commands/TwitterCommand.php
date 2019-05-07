@@ -30,9 +30,10 @@ class TwitterCommand extends Command
     {
         $arrParcentDays = $this->getArrParcentDays();
 
-        // 現時刻%1パーセント === 0を判定
-        if(!$this->checkProgressedOnePercent($arrParcentDays)){
-            return;
+        $parcent = $this->getKeyFromArrParcentDays($arrParcentDays);
+
+        if(is_null($parcent)){
+            return false;
         }
 
         $message = $this->createMessage();
@@ -51,7 +52,7 @@ class TwitterCommand extends Command
         // $schedule->command(static::class)->everyMinute();
     }
 
-    public function getArrParcentDays(): array {
+    private function getArrParcentDays(): array {
         date_default_timezone_set('Asia/Tokyo');
         $nowYear = date('Y');
         $startYear = strtotime("{$nowYear}-01-01 00:00:00");
@@ -65,10 +66,14 @@ class TwitterCommand extends Command
         return $arrParcentDays;
     }
 
-    public function checkProgressedOnePercent($arrParcentDays): bool{
-        if(!in_array(time(),$arrParcentDays,true)) {
-            return false;
+    private function getKeyFromArrParcentDays($arrParcentDays): ?int{
+        $arrParcentDayFlip = array_flip($arrParcentDays);
+        $nowTime = time();
+        foreach($arrParcentDayFlip as $key => $value) {
+            if(isset($arrParcentDayFlip[$nowTime])) {
+                return $arrParcentDayFlip[$nowTime];
+            }
         }
-        return true;
+        return null;
     }
 }
