@@ -28,10 +28,16 @@ class TwitterCommand extends Command
      */
     public function handle()
     {
-        date_default_timezone_set('Asia/Tokyo');
-        $this->info('Start check percent of the year.');
-        echo date("Y-m-d h:i:s"),PHP_EOL;
-        echo date("Y-m-d h:i:s",strtotime("+3 day")),PHP_EOL;
+        $arrParcentDays = $this->getArrParcentDays();
+
+        // 現時刻%1パーセント === 0を判定
+        if(!$this->checkProgressedOnePercent($arrParcentDays)){
+            return;
+        }
+
+        $message = $this->createMessage();
+
+        $this->twitterAuth();
     }
 
     /**
@@ -43,5 +49,26 @@ class TwitterCommand extends Command
     public function schedule(Schedule $schedule): void
     {
         // $schedule->command(static::class)->everyMinute();
+    }
+
+    public function getArrParcentDays(): array {
+        date_default_timezone_set('Asia/Tokyo');
+        $nowYear = date('Y');
+        $startYear = strtotime("{$nowYear}-01-01 00:00:00");
+        $oneYearTimestamp = strtotime($nowYear+1 . '-01-01 00:00:00')- $startYear;
+        $oneParcentSec = $oneYearTimestamp/100;
+
+        $arrParcentDays=[];
+        for($i=0;$i<=100;$i++) {
+            $arrParcentDays[$i] = $startYear+$oneParcentSec*$i;
+        }
+        return $arrParcentDays;
+    }
+
+    public function checkProgressedOnePercent($arrParcentDays): bool{
+        if(!in_array(time(),$arrParcentDays,true)) {
+            return false;
+        }
+        return true;
     }
 }
