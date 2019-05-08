@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 class TwitterCommand extends Command
 {
@@ -36,7 +37,7 @@ class TwitterCommand extends Command
             return false;
         }
 
-        $message = $this->createMessage();
+        $message = $this->createMessage($parcent);
 
         $this->twitterAuth();
     }
@@ -75,5 +76,16 @@ class TwitterCommand extends Command
             }
         }
         return null;
+    }
+
+    private function createMessage($parcent): string {
+        $message = date('Y') . '年の' . $parcent . '%が終了しました。';
+        return $message;
+    }
+
+    private function twitterAuth() {
+        $to = new TwitterOAuth(env('CONSUMER_KEY'),env('CONSUMER_SECRET'),env('ACCESS_TOKEN'),env('ACCESS_TOKEN_SECRET'));
+        $user = $to->get('account/verify_credentials');
+        var_dump($user);
     }
 }
