@@ -79,19 +79,24 @@ class TwitterCommand extends Command
     }
 
     private function createMessage($parcent): string {
-        $message = date('Y') . '年の' . $parcent . '%が終了しました。';
-        $arrYearAsciiArt = getYearAsciiArt();
         $nowYear = date('Y');
         $nextYear = date('Y',strtotime('+ 1 year'));
+        $message = "{$nowYear}年の{$parcent}%が終了しました。\n";
+        $arrYearAsciiArt = getYearAsciiArt();
 
         $arrAsciiArtMsg = [];
 
         foreach(str_split($nowYear) as $key => $value){
             if($value === $nextYear[$key]) {
-                $arrYearAsciiArt[] = $arrYearAsciiArt[$key];
+                $arrAsciiArtMsg[] = $arrYearAsciiArt[$value];
             }else{
-                $arrYearAsciiArt[] = createAsciiArt($key,$parcent);
+                $arrAsciiArtMsg[] = createAsciiArt($key,$parcent);
             }
+        }
+
+        $maxlineNum = 6;
+        for($i=0;$i < $maxlineNum;$i++) {
+            $message .=   $arrAsciiArtMsg[0][$i] . "" . $arrAsciiArtMsg[1][$i] . "" . $arrAsciiArtMsg[2][$i] . "" . $arrAsciiArtMsg[3][$i] . "\n";
         }
         return $message;
     }
