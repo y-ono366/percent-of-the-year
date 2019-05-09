@@ -106,7 +106,20 @@ class TwitterCommand extends Command
         $twitter->post("statuses/update", ["status" => $message]);
     }
 
-    private function createAsciiArt($key,$parcent) {
+    private function createAsciiArt ($parcent,$key,$arrYearAsciiArt):array{
+        $yearAsciiArt = [];
+        $maxlineNum = 6;
+        $oneMemo = 100/$maxlineNum;
+
+        for($i=0;$i<$maxlineNum;$i++) {
+            if($i < floor($parcent/$oneMemo)) {
+                $yearAsciiArt[] = $arrYearAsciiArt[$key+1][$i];
+            }else{
+                $yearAsciiArt[] = $arrYearAsciiArt[$key][$i];
+            }
+        }
+
+        return $yearAsciiArt;
     }
 
     private function getYearAsciiArt() {
