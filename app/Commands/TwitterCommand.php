@@ -80,11 +80,92 @@ class TwitterCommand extends Command
 
     private function createMessage($parcent): string {
         $message = date('Y') . '年の' . $parcent . '%が終了しました。';
+        $arrYearAsciiArt = getYearAsciiArt();
+        $nowYear = date('Y');
+        $nextYear = date('Y',strtotime('+ 1 year'));
+
+        $arrAsciiArtMsg = [];
+
+        foreach(str_split($nowYear) as $key => $value){
+            if($value === $nextYear[$key]) {
+                $arrYearAsciiArt[] = $arrYearAsciiArt[$key];
+            }else{
+                $arrYearAsciiArt[] = createAsciiArt($key,$parcent);
+            }
+        }
         return $message;
     }
 
     private function tweet($message) {
         $twitter = new TwitterOAuth(env('CONSUMER_KEY'),env('CONSUMER_SECRET'),env('ACCESS_TOKEN'),env('ACCESS_TOKEN_SECRET'));
         $twitter->post("statuses/update", ["status" => $message]);
+    }
+
+    private function createAsciiArt($key,$parcent) {
+    }
+
+    private function getYearAsciiArt(){
+        return [
+            "┏━━┓".
+            "┃┏┓┃".
+            "┃┃┃┃".
+            "┃┃┃┃".
+            "┃┗┛┃".
+            "┗━━┛",
+            "┏┓".
+            "┃┃".
+            "┃┃".
+            "┃┃".
+            "┃┃".
+            "┗┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┃┏━┛".
+            "┃┗━┓".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+            "┏━━┓".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━┓┃".
+            "┏━┛┃".
+            "┗━━┛",
+        ];
     }
 }
