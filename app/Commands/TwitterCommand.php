@@ -39,7 +39,7 @@ class TwitterCommand extends Command
 
         $message = $this->createMessage($parcent);
 
-        $this->twitterAuth();
+        $this->tweet($message);
     }
 
     /**
@@ -83,9 +83,8 @@ class TwitterCommand extends Command
         return $message;
     }
 
-    private function twitterAuth() {
-        $to = new TwitterOAuth(env('CONSUMER_KEY'),env('CONSUMER_SECRET'),env('ACCESS_TOKEN'),env('ACCESS_TOKEN_SECRET'));
-        $user = $to->get('account/verify_credentials');
-        var_dump($user);
+    private function tweet($message) {
+        $twitter = new TwitterOAuth(env('CONSUMER_KEY'),env('CONSUMER_SECRET'),env('ACCESS_TOKEN'),env('ACCESS_TOKEN_SECRET'));
+        $twitter->post("statuses/update", ["status" => $message]);
     }
 }
