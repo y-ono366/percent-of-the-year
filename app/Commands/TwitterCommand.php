@@ -86,16 +86,17 @@ class TwitterCommand extends Command
 
         $arrAsciiArtMsg = [];
 
-        foreach(str_split($nowYear) as $key => $value){
-            if($value === $nextYear[$key]) {
-                $arrAsciiArtMsg[] = $arrYearAsciiArt[$value];
+        foreach(str_split($nowYear) as $key => $num){
+            // 次年の数値と比較
+            if($num === $nextYear[$key]) {
+                $arrAsciiArtMsg[] = $arrYearAsciiArt[$num];
             }else{
-                $arrAsciiArtMsg[] = createAsciiArt($key,$parcent);
+                $arrAsciiArtMsg[] = createAsciiArt($num,$parcent,$arrYearAsciiArt);
             }
         }
 
-        $maxlineNum = 6;
-        for($i=0;$i < $maxlineNum;$i++) {
+        $maxRow = 6;
+        for($i=0;$i < $maxRow;$i++) {
             $message .=   $arrAsciiArtMsg[0][$i] . "" . $arrAsciiArtMsg[1][$i] . "" . $arrAsciiArtMsg[2][$i] . "" . $arrAsciiArtMsg[3][$i] . "\n";
         }
         return $message;
@@ -106,16 +107,17 @@ class TwitterCommand extends Command
         $twitter->post("statuses/update", ["status" => $message]);
     }
 
-    private function createAsciiArt ($parcent,$key,$arrYearAsciiArt):array{
+    private function createAsciiArt ($num,$parcent,$arrYearAsciiArt):array{
         $yearAsciiArt = [];
-        $maxlineNum = 6;
-        $oneMemo = 100/$maxlineNum;
+        $maxRow = 6;
+        $oneMemo = 100/$maxRow;
 
-        for($i=0;$i<$maxlineNum;$i++) {
-            if($i < floor($parcent/$oneMemo)) {
-                $yearAsciiArt[] = $arrYearAsciiArt[$key+1][$i];
+        for($row=0;$row<$maxRow;$row++) {
+            // 次の年の数値を入れるか判定
+            if($row < floor($parcent/$oneMemo)) {
+                $yearAsciiArt[] = $arrYearAsciiArt[$num+1][$row];
             }else{
-                $yearAsciiArt[] = $arrYearAsciiArt[$key][$i];
+                $yearAsciiArt[] = $arrYearAsciiArt[$num][$row];
             }
         }
 
