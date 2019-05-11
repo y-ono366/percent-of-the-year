@@ -56,4 +56,8 @@ return [
         App\Providers\AppServiceProvider::class,
     ],
 
+    'aliases' => [
+        'MessageService' => App\Facades\MessageService::class,
+    ],
+
 ];
