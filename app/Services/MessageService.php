@@ -3,6 +3,7 @@
 namespace App\Services;
 class MessageService
 {
+    public $asciiArtMaxRow = 6;
 
     public function createTweetMessage($parcent): string {
         $nowYear = date('Y');
@@ -17,37 +18,37 @@ class MessageService
             if($num === $nextYear[$key]) {
                 $arrAsciiArtMsg[] = $arrYearAsciiArt[$num];
             }else{
-                $arrAsciiArtMsg[] = $this->createAsciiArt($num,$parcent,$arrYearAsciiArt);
+                $arrAsciiArtMsg[] = $this->createScrollNumOfAsciiArt($num,$parcent,$arrYearAsciiArt);
             }
         }
 
-        $maxRow = 6;
-        for($i=0;$i < $maxRow;$i++) {
+        for($i=0;$i < $this->asciiArtMaxRow;$i++) {
             $message .=   $arrAsciiArtMsg[0][$i] . "" . $arrAsciiArtMsg[1][$i] . "" . $arrAsciiArtMsg[2][$i] . "" . $arrAsciiArtMsg[3][$i] . "\n";
         }
         return $message;
     }
 
-    private function createAsciiArt ($num,$parcent,$arrYearAsciiArt):array{
+    private function createScrollNumOfAsciiArt ($num,$parcent,$arrYearAsciiArt):array{
         $yearAsciiArt = [];
-        $maxRow = 6;
-        $oneMemo = 100/$maxRow;
+        $oneMemo = 100/$this->asciiArtMaxRow;
         $firstFlg = true;
+        $nowYearRow = 0;
+        $nextYearRow = $this->asciiArtMaxRow - ($parcent/$oneMemo);
 
-        for($row=0;$row<$maxRow;$row++) {
+        for($row=0;$row<$this->asciiArtMaxRow;$row++) {
             // 次の年の数値を入れるか判定
             if($row < floor($parcent/$oneMemo)) {
                 $nextNum = ((int)$num === 9)? 0:(int)$num+1;
-                $nextRow = $maxRow-$row - 1;
-                var_dump($nextRow);
-                $yearAsciiArt[] = $arrYearAsciiArt[$nextNum][$nextRow];
+                $yearAsciiArt[] = $arrYearAsciiArt[$nextNum][$nextYearRow];
+                $nextYearRow++;
             }else{
                 // 次の年と感覚を開ける
                 if($firstFlg) {
                     $yearAsciiArt[] = "";
                     $firstFlg = false;
                 }
-                $yearAsciiArt[] = $arrYearAsciiArt[$num][$row];
+                $yearAsciiArt[] = $arrYearAsciiArt[$num][$nowYearRow];
+                $nowYearRow++;
             }
         }
         return $yearAsciiArt;
@@ -64,12 +65,12 @@ class MessageService
                 "┗━━┛",
             ],
             [
-                "┏┓",
-                "┃┃",
-                "┃┃",
-                "┃┃",
-                "┃┃",
-                "┗┛",
+                " ┏┓ ",
+                " ┃┃ ",
+                " ┃┃ ",
+                " ┃┃ ",
+                " ┃┃ ",
+                " ┗┛ ",
             ],
             [
                 "┏━━┓",
