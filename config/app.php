@@ -58,6 +58,7 @@ return [
 
     'aliases' => [
         'MessageService' => App\Facades\MessageService::class,
+        'TwitterService' => App\Facades\TwitterService::class,
     ],
 
 ];
