@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Services\MessageService;
+use App\Services\TwitterService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('MessageService', MessageService::class);
+        $this->app->bind('TwitterService', TwitterService::class);
     }
 }

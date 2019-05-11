@@ -4,8 +4,8 @@ namespace App\Commands;
 
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use Abraham\TwitterOAuth\TwitterOAuth;
 use MessageService;
+use TwitterService;
 
 class TwitterCommand extends Command
 {
@@ -23,6 +23,13 @@ class TwitterCommand extends Command
      */
     protected $description = 'Command description';
 
+    protected $twitter;
+
+    public function __construct() {
+        parent::__construct();
+        $this->twitter = app()->make('TwitterService');
+    }
+
     /**
      * Execute the console command.
      *
@@ -38,10 +45,9 @@ class TwitterCommand extends Command
             return false;
         }
         $messageService = app()->make('MessageService');
-
         $message = $messageService->createTweetMessage($parcent);
 
-        $this->tweet($message);
+        $this->twitter->post($message);
     }
 
     /**
@@ -80,9 +86,5 @@ class TwitterCommand extends Command
         return null;
     }
 
-    private function tweet($message) {
-        $twitter = new TwitterOAuth(env('CONSUMER_KEY'),env('CONSUMER_SECRET'),env('ACCESS_TOKEN'),env('ACCESS_TOKEN_SECRET'));
-        $twitter->post("statuses/update", ["status" => $message]);
-    }
 
 }
