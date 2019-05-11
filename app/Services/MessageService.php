@@ -31,9 +31,9 @@ class MessageService
     private function createScrollNumOfAsciiArt ($num,$parcent,$arrYearAsciiArt):array{
         $yearAsciiArt = [];
         $oneMemo = 100/$this->asciiArtMaxRow;
-        $firstFlg = true;
+        $nextYearRow = ceil($this->asciiArtMaxRow - ($parcent/$oneMemo));
         $nowYearRow = 0;
-        $nextYearRow = $this->asciiArtMaxRow - ($parcent/$oneMemo);
+        $firstFlg = true;
 
         for($row=0;$row<$this->asciiArtMaxRow;$row++) {
             // 次の年の数値を入れるか判定
@@ -43,7 +43,7 @@ class MessageService
                 $nextYearRow++;
             }else{
                 // 次の年と感覚を開ける
-                if($firstFlg) {
+                if($firstFlg && $parcent !== 0) {
                     $yearAsciiArt[] = "";
                     $firstFlg = false;
                 }
