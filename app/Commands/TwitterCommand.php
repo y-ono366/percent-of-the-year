@@ -37,17 +37,24 @@ class TwitterCommand extends Command
      */
     public function handle()
     {
+        $this->info('[START] percent of the year command');
         $arrParcentDays = $this->getArrParcentDays();
 
         $parcent = $this->getKeyFromArrParcentDays($arrParcentDays);
 
         if(is_null($parcent)){
+            $this->info('[FINISH] percent of the year command');
             return false;
         }
         $messageService = app()->make('MessageService');
         $message = $messageService->createTweetMessage($parcent);
 
-        $this->twitter->post($message);
+        $result = $this->twitter->post($message);
+        if(!empty($result->errors)) {
+            $this->error('[ERROR] twitter post method ' . $result->errors[0]->message);
+            return false;
+        }
+        $this->info('[END] percent of the year command');
     }
 
     /**
